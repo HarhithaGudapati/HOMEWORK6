@@ -29,9 +29,14 @@ public class TeamServiceImpl implements TeamService {
 	@Autowired
 	TeamRepository tr;
 	
+	@Autowired
+	public TeamServiceImpl(TeamRepository tr) {
+		this.tr = tr;
+	}
+	
 	@Override
-	public Optional<Team> getTeam(String name, int year) {
-		TeamEntityId id = new TeamEntityId(year, name);
+	public Optional<Team> getTeam(int companyId ,String name, int year) {
+		TeamEntityId id = new TeamEntityId(year, name,companyId );
 		var te = tr.findById(id);
 		Optional<Team> result = te.isPresent() ? Optional.of(new Team(te.get())) : Optional.empty(); 
 		
@@ -146,6 +151,19 @@ TeamEntity teamToUpdate = new TeamEntity(team);
 		
 		tr.save(new TeamEntity(team));
 		
+	}
+
+	@Override
+	public List<Team> getTeamsByCompany(int id) {
+		// TODO Auto-generated method stub
+		var teamEntities = tr.findAllByIdCompanyId(companyId);
+		return from(teamEntities);
+	}
+
+	@Override
+	public Optional<Team> getTeam(String name, int year) {
+		// TODO Auto-generated method stub
+		return Optional.empty();
 	}
 
 

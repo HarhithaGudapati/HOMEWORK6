@@ -25,6 +25,11 @@ import lombok.NoArgsConstructor;
 public class TeamController {
     @Autowired
     private TeamService teamService;
+    
+    @Autowired
+	public TeamController(TeamService teamService) {
+		this.teamService = teamService;
+	}
 
     /**
      * Get all teams
@@ -72,6 +77,10 @@ public class TeamController {
         return ResponseEntity.ok(teamService.getTeams(league, year));
     } */
 
+    @GetMapping("/company/{id}")
+	public ResponseEntity<Object> getBillsByCompany(@PathVariable int id){
+		return ResponseEntity.ok(teamService.getTeamsByCompany(id));
+	}
     @PostMapping()
     public ResponseEntity<Team> add(@RequestBody Team team) {
         teamService.addTeam(team);

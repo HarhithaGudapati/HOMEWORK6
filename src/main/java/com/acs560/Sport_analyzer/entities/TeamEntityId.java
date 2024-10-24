@@ -23,7 +23,7 @@ public class TeamEntityId implements Serializable {
 	 
 	    private int leagueyear;
 	    private String team;
-  
+	    private int companyId;
  
  
 }

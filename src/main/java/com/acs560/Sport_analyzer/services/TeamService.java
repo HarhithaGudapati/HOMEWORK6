@@ -49,6 +49,10 @@ public interface TeamService {
 
 	Optional<Team> getTeam(String name, int year);
 
+	Object getTeamsByCompany(int id);
+
+	Optional<Team> getTeam(int companyId, String name, int year);
+
 	
 
 
