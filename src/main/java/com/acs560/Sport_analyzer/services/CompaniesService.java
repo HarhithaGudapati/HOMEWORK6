@@ -9,7 +9,7 @@ import com.acs560.Sport_analyzer.requests.CompanyRequest;
 
 import jakarta.validation.Valid;
 
-public interface CompaniesService {
+/*public interface CompaniesService {
 
 
 	List<Company> getCompanies();
@@ -23,6 +23,19 @@ public interface CompaniesService {
 	boolean isPresent();
 
 	Object get();
+
+	Optional<Company> getCompanyByName(String name);
 	
 	
+}*/
+
+public interface CompaniesService {
+    List<Company> getCompanies();
+    Optional<Company> getCompany(int id);
+    Optional<Company> getCompanyByName(String name);
+    Company addCompany(@Valid CompanyRequest c);
+    Company updateCompany(int id, CompanyRequest c);
+    boolean deleteCompany(int id);
+    // Remove isPresent() and get() as they're not needed
+	boolean isPresent();
 }

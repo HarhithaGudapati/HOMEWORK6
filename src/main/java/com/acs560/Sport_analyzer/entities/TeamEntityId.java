@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 
-@Embeddable
+/*@Embeddable
 @Getter
 @EqualsAndHashCode
 @AllArgsConstructor
@@ -19,11 +19,29 @@ import lombok.ToString;
 @ToString
 public class TeamEntityId implements Serializable {
  
+	
+	public static String getCompanyId;
 	private static final long serialVersionUID = 7252327203288421943L;
-	 
-	    private int leagueyear;
-	    private String team;
-	    private int companyId;
- 
- 
+	private String name =  ""; 
+	    private int leagueyear = 0;
+	    private int companyId = 0; 
+} */
+
+@Embeddable
+@Getter
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class TeamEntityId implements Serializable {
+    private static final long serialVersionUID = 7252327203288421943L;
+    
+    @Column(name = "name")
+    private String name;
+    
+    @Column(name = "league_year")
+    private int leagueyear;
+    
+    @Column(name = "company_id")
+    private int companyId;
 }

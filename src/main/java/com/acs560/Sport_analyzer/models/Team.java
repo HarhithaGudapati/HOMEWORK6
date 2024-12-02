@@ -3,6 +3,7 @@ package com.acs560.Sport_analyzer.models;
 import java.util.Comparator;
 import java.util.Objects;
 
+import com.acs560.Sport_analyzer.entities.CompanyEntity;
 import com.acs560.Sport_analyzer.entities.TeamEntity;
 
 import jakarta.validation.constraints.Max;
@@ -45,6 +46,7 @@ public class Team implements Comparable<Team> {
     @NotNull(message="Points are required")
     @Min(value=0, message="Points must be non-negative")
     private Integer points;
+    private CompanyEntity company;
 
     @Override
     public int hashCode() {
@@ -64,20 +66,55 @@ public class Team implements Comparable<Team> {
                 Objects.equals(league, other.league);
     }
 
-    public Team(String name, int year, String league) {
+  /*  public Team(String name, int year, String league) {
         this.name = name;
         this.year = year;
         this.league = league;
     }
-
+    public Team(int year, String name, String league, int wins, int losses, int points) {
+        this.year = year;
+        this.name = name;
+        this.league = league;
+        this.wins = wins;
+        this.losses = losses;
+        this.points = points;
+    } */
+    
     public Team(TeamEntity te) {
-        this(te.getId().getLeagueyear(),
-                te.getId().getTeam(),
-                te.getLeague(),
-                te.getWins(),
-                te.getLosses(),
-                te.getPoints());
+        this.name = te.getId().getName();
+        this.year = te.getId().getLeagueyear();
+        this.league = te.getLeague();
+        this.wins = te.getWins();
+        this.losses = te.getLosses();
+        this.points = te.getPoints();
+        this.company = te.getCompany();
     }
+
+    public int getYear() {
+        return year;
+    }
+
+    public CompanyEntity getCompany() {
+        return company;
+    }
+
+    public String getLeague() {
+        return league;
+    }
+
+    public int getWins() {
+        return wins;
+    }
+
+    public int getLosses() {
+        return losses;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    
 
     @Override
     public int compareTo(Team o) {
@@ -87,8 +124,11 @@ public class Team implements Comparable<Team> {
                 .compare(this, o);
     }
 
-	public TeamEntity getCompany() {
-		// TODO Auto-generated method stub
-		return null;
+		public int getCompanyId() {
+		    if (company != null) {
+		        return company.getId();  // assuming CompanyEntity has a method getId()
+		    }
+		    return -1;  // or return an appropriate value to represent a missing company ID
+		}
 	}
-}
+

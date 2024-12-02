@@ -2,6 +2,7 @@ package com.acs560.Sport_analyzer.services.impl;
 
 import java.util.Comparator;
 
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -17,7 +18,6 @@ import com.acs560.Sport_analyzer.entities.TeamEntityId;
 import com.acs560.Sport_analyzer.models.Team;
 import com.acs560.Sport_analyzer.repositories.TeamRepository;
 import com.acs560.Sport_analyzer.services.TeamService;
-
 
 
 /**
@@ -36,28 +36,29 @@ public class TeamServiceImpl implements TeamService {
 	
 	@Override
 	public Optional<Team> getTeam(int companyId ,String name, int year) {
-		TeamEntityId id = new TeamEntityId(year, name,companyId );
+		TeamEntityId id = new TeamEntityId(name,companyId, year );
 		var te = tr.findById(id);
-		Optional<Team> result = te.isPresent() ? Optional.of(new Team(te.get())) : Optional.empty(); 
+		//Optional<Team> result = te.isPresent() ? Optional.of(new Team(te.get())) : Optional.empty(); 
 		
-		return result;
+		//return result;
+		return te.map(Team::new);
 	}
 
+	
+	private boolean exists(TeamEntity te) {
+	    TeamEntityId teamId = te.getId();  // Ensure te.getId() returns a TeamEntityId
+	    return tr.existsById(teamId);
+	}
+	
 	@Override
 	public List<Team> getTeams(){
 		var teamEntities = ((List<TeamEntity>) tr.findAll());
 		return from(teamEntities);
 	}
-
-	@Override
-	public List<Team> getTeamsByName(String name) {
-		var teamEntities = tr.findAllByIdTeam(name);
-		return from(teamEntities);
-	}
 	
 	@Override
 	public List<Team> getTeamByNameAndYear (String name, int year) {
-		var teamEntities = tr.findAllByIdLeagueyearAndIdTeam(year, name);
+		var teamEntities = tr.findAllByIdLeagueyearAndIdCompanyId(year, name);
 		return from(teamEntities);
 	}
 	
@@ -78,7 +79,7 @@ public class TeamServiceImpl implements TeamService {
 	@Override
 	public List<Team> getTeamsByNameAndYearAndRange(String name, int year, int range) {
 		var years = getRange(year, range);
-		var teamEntities = tr.findAllByIdTeamAndIdLeagueyearIn(name, years);
+		var teamEntities = tr.findAllByIdNameAndIdLeagueyearIn(name, years);
 		
 		return from(teamEntities);
 	}
@@ -113,25 +114,27 @@ public class TeamServiceImpl implements TeamService {
 		return teams;
 	}
 	
-	private boolean exists(TeamEntity te) {
-		return tr.existsById(te.getId());
-	}
-
 	@Override
 	public void addTeam(Team team) {
 TeamEntity teamToAdd = new TeamEntity(team);
+TeamEntityId teamId = teamToAdd.getId(); 
 		
-		if (exists(teamToAdd)) {
+		/*if (exists(teamToAdd)) {
 			throw new IllegalArgumentException("Team already exists");
 		}
 		
-		tr.save(teamToAdd);
+		tr.save(teamToAdd); */
+ if (tr.existsById(teamId)) {
+    throw new IllegalArgumentException("Team already exists");
+}
+
+tr.save(teamToAdd);
 		
 	}
 
 	@Override
 	public void deleteTeam(Team team) {
-TeamEntity teamToDelete = new TeamEntity(team);
+TeamEntity teamToDelete = new TeamEntity();
 		
 		if (!exists(teamToDelete)) {
 			throw new NoSuchElementException("Team does not exist");
@@ -154,16 +157,22 @@ TeamEntity teamToUpdate = new TeamEntity(team);
 	}
 
 	@Override
-	public List<Team> getTeamsByCompany(int id) {
-		// TODO Auto-generated method stub
+	public List<Team> getTeamsByCompany(int companyId) {
+	
 		var teamEntities = tr.findAllByIdCompanyId(companyId);
 		return from(teamEntities);
 	}
 
 	@Override
 	public Optional<Team> getTeam(String name, int year) {
-		// TODO Auto-generated method stub
+		
 		return Optional.empty();
+	}
+
+	@Override
+	public List<Team> getTeamsByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

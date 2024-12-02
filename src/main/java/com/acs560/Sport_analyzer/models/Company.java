@@ -1,5 +1,7 @@
 package com.acs560.Sport_analyzer.models;
 
+import java.util.List;
+
 import com.acs560.Sport_analyzer.entities.CompanyEntity;
 
 import lombok.AllArgsConstructor;
@@ -18,6 +20,7 @@ public class Company implements Comparable<Company> {
 	private int id;
 	private String name;
 	
+	
 	public Company(CompanyEntity ce) {
 		this(ce.getId(), ce.getName());
 	}
@@ -26,4 +29,5 @@ public class Company implements Comparable<Company> {
 	public int compareTo(Company o) {
 		return name.compareTo(o.name);
 	}
+	
 }
